@@ -10,8 +10,9 @@ import {
     Edit,
     Trash2,
     Plus,
-    X
 } from 'lucide-react';
+import ProductAddEditModal from '@/components/Modals/ProductAddEditModal';
+import DeleteModal from '@/components/Modals/DeleteModal';
 
 type Product = {
     id: string;
@@ -19,6 +20,7 @@ type Product = {
     productId: string;
     category: string;
     price: string;
+    stock: number;
     sales: number;
     icon: string;
     image?: string;
@@ -31,6 +33,7 @@ const initialProducts: Product[] = [
         productId: '#A7F3D67',
         category: 'Electronics',
         price: '$699.99',
+        stock: 120,
         sales: 5200,
         icon: '📱',
     },
@@ -40,6 +43,7 @@ const initialProducts: Product[] = [
         productId: '#B6E4F24',
         category: 'Electronics',
         price: '$1299.99',
+        stock: 75,
         sales: 4300,
         icon: '💻',
     },
@@ -49,6 +53,7 @@ const initialProducts: Product[] = [
         productId: '#D4B7C34',
         category: 'Electronics',
         price: '$49.99',
+        stock: 180,
         sales: 2500,
         icon: '🖱️',
     },
@@ -58,6 +63,7 @@ const initialProducts: Product[] = [
         productId: '#F8G9H45',
         category: 'Electronics',
         price: '$79.99',
+        stock: 150,
         sales: 1800,
         icon: '⌨️',
     },
@@ -67,6 +73,7 @@ const initialProducts: Product[] = [
         productId: '#C5D2A89',
         category: 'Home',
         price: '$249.99',
+        stock: 341,
         sales: 3100,
         icon: '🪑',
     },
@@ -76,6 +83,7 @@ const initialProducts: Product[] = [
         productId: '#H7I8J90',
         category: 'Home',
         price: '$899.99',
+        stock: 45,
         sales: 1200,
         icon: '🛋️',
     },
@@ -85,6 +93,7 @@ const initialProducts: Product[] = [
         productId: '#K1L2M34',
         category: 'Home',
         price: '$89.99',
+        stock: 200,
         sales: 950,
         icon: '💡',
     },
@@ -94,6 +103,7 @@ const initialProducts: Product[] = [
         productId: '#E3A5623',
         category: 'Sports',
         price: '$119.99',
+        stock: 200,
         sales: 2000,
         icon: '👟',
     },
@@ -103,6 +113,7 @@ const initialProducts: Product[] = [
         productId: '#N4O5P67',
         category: 'Sports',
         price: '$39.99',
+        stock: 300,
         sales: 1500,
         icon: '🧘',
     },
@@ -112,6 +123,7 @@ const initialProducts: Product[] = [
         productId: '#Q6R7S89',
         category: 'Sports',
         price: '$149.99',
+        stock: 80,
         sales: 800,
         icon: '🏋️',
     },
@@ -129,6 +141,7 @@ export default function ProductsPage() {
         name: '',
         category: 'Electronics',
         price: '',
+        stock: '',
         sales: '',
         icon: '',
         image: '',
@@ -152,6 +165,7 @@ export default function ProductsPage() {
 
     // Calculate statistics
     const totalProducts = products.length;
+    const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
     const totalSold = products.reduce((sum, p) => sum + p.sales, 0);
     const totalCategories = new Set(products.map(p => p.category)).size;
 
@@ -162,7 +176,12 @@ export default function ProductsPage() {
             icon: Package,
             color: 'text-blue-400',
         },
-
+        {
+            title: 'Total Stock',
+            value: totalStock.toLocaleString(),
+            icon: Box,
+            color: 'text-green-400',
+        },
         {
             title: 'Total Sold',
             value: totalSold.toLocaleString(),
@@ -194,6 +213,7 @@ export default function ProductsPage() {
             name: '',
             category: 'Electronics',
             price: '',
+            stock: '',
             sales: '',
             icon: '📦',
             image: '',
@@ -222,12 +242,13 @@ export default function ProductsPage() {
     const handleEditProduct = (product: Product) => {
         setEditingProduct(product);
         setFormData({
-            name: "Dark Chocolate",
-            category: "Snacks",
-            price: "99",
-            sales: "230",
-            icon: "🍫",
-            image: "/choco.png",
+            name: product.name,
+            category: product.category,
+            price: product.price.replace('$', ''),
+            stock: product.stock.toString(),
+            sales: product.sales.toString(),
+            icon: product.icon,
+            image: product.image || '',
         });
         setImageFile(null);
         setImagePreview(product.image || '');
@@ -244,6 +265,7 @@ export default function ProductsPage() {
             productId: editingProduct?.productId || generateProductId(),
             category: formData.category,
             price: `$${parseFloat(formData.price).toFixed(2)}`,
+            stock: parseInt(formData.stock),
             sales: parseInt(formData.sales),
             icon: formData.icon,
             image: formData.image || undefined,
@@ -263,6 +285,7 @@ export default function ProductsPage() {
             name: '',
             category: 'Electronics',
             price: '',
+            stock: '',
             sales: '',
             icon: '📦',
             image: '',
@@ -298,6 +321,7 @@ export default function ProductsPage() {
             name: '',
             category: 'Electronics',
             price: '',
+            stock: '',
             sales: '',
             icon: '📦',
             image: '',
@@ -309,7 +333,7 @@ export default function ProductsPage() {
     return (
         <div className="space-y-6">
             {/* Statistics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat) => {
                     const Icon = stat.icon;
                     return (
@@ -380,6 +404,7 @@ export default function ProductsPage() {
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">NAME</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">CATEGORY</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">PRICE</th>
+                                    <th className="text-left p-4 text-gray-400 font-medium text-sm">STOCK</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">SALES</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">ACTIONS</th>
                                 </tr>
@@ -411,6 +436,7 @@ export default function ProductsPage() {
                                         </td>
                                         <td className="p-4 text-gray-300">{product.category}</td>
                                         <td className="p-4 text-gray-100 font-semibold">{product.price}</td>
+                                        <td className="p-4 text-gray-300">{product.stock}</td>
                                         <td className="p-4 text-gray-300">{product.sales.toLocaleString()}</td>
                                         <td className="p-4">
                                             <div className="flex items-center space-x-2">
@@ -441,235 +467,25 @@ export default function ProductsPage() {
             </div>
 
             {/* Add/Edit Product Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-                        <div className="p-6 border-b border-[#2a2a2a] flex items-center justify-between">
-                            <h2 className="text-xl font-semibold text-gray-100">
-                                {editingProduct ? 'Edit Product' : 'Add New Product'}
-                            </h2>
-                            <button
-                                onClick={handleCloseModal}
-                                className="text-gray-400 hover:text-white transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Product Name
-                                </label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                                    placeholder="Enter product name"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Category
-                                    </label>
-                                    <select
-                                        required
-                                        value={formData.category}
-                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                        className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                                    >
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Home">Home</option>
-                                        <option value="Sports">Sports</option>
-                                        <option value="Fashion">Fashion</option>
-                                        <option value="Books">Books</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Icon (Emoji)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={formData.icon}
-                                        onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                                        className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                                        placeholder="📦"
-                                        maxLength={2}
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Product Image
-                                </label>
-                                <div className="space-y-3">
-                                    <div>
-                                        <label className="block text-xs text-gray-400 mb-1">
-                                            Upload Image File
-                                        </label>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleImageFileChange}
-                                            className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500 file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
-                                        />
-                                    </div>
-                                    <div className="relative">
-                                        <span className="absolute inset-0 flex items-center">
-                                            <span className="w-full border-t border-[#3a3a3a]"></span>
-                                        </span>
-                                        <div className="relative flex justify-center text-xs">
-                                            <span className="bg-[#1a1a1a] px-2 text-gray-400">OR</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs text-gray-400 mb-1">
-                                            Enter Image URL
-                                        </label>
-                                        <input
-                                            type="url"
-                                            value={formData.image}
-                                            onChange={(e) => {
-                                                setFormData({ ...formData, image: e.target.value });
-                                                setImagePreview(e.target.value);
-                                                setImageFile(null);
-                                            }}
-                                            className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                                            placeholder="https://example.com/image.jpg"
-                                        />
-                                    </div>
-                                    {imagePreview && (
-                                        <div className="mt-2">
-                                            <p className="text-xs text-gray-400 mb-1">Image Preview:</p>
-                                            <img
-                                                src={imagePreview}
-                                                alt="Preview"
-                                                className="w-20 h-20 object-cover rounded-lg border border-[#3a3a3a]"
-                                                onError={(e) => {
-                                                    e.currentTarget.style.display = 'none';
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Price ($)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        required
-                                        step="0.01"
-                                        min="0"
-                                        value={formData.price}
-                                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                        className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                                        placeholder="0.00"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                                        Sales
-                                    </label>
-                                    <input
-                                        type="number"
-                                        required
-                                        min="0"
-                                        value={formData.sales}
-                                        onChange={(e) => setFormData({ ...formData, sales: e.target.value })}
-                                        className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                                        placeholder="0"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex justify-end space-x-3 pt-4">
-                                <button
-                                    type="button"
-                                    onClick={handleCloseModal}
-                                    className="px-4 py-2 bg-[#2a2a2a] text-gray-300 hover:bg-[#3a3a3a] rounded-lg transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
-                                >
-                                    {editingProduct ? 'Update Product' : 'Add Product'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            <ProductAddEditModal isModalOpen={isModalOpen}
+                editingProduct={editingProduct}
+                handleCloseModal={handleCloseModal}
+                handleSubmit={handleSubmit}
+                formData={formData}
+                setFormData={setFormData}
+                handleImageFileChange={handleImageFileChange}
+                setImagePreview={setImagePreview}
+                setImageFile={setImageFile}
+                imagePreview={imagePreview}
+            />
 
             {/* Delete Confirmation Modal */}
-            {isDeleteModalOpen && productToDelete && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] w-full max-w-md mx-4">
-                        <div className="p-6 border-b border-[#2a2a2a]">
-                            <div className="flex items-center space-x-3">
-                                <div className="shrink-0 w-12 h-12 bg-red-500 bg-opacity-20 rounded-full flex items-center justify-center">
-                                    <Trash2 className="w-6 h-6 text-red-400" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-100">Delete Product</h3>
-                                    <p className="text-sm text-gray-400">This action cannot be undone.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="p-6">
-                            <p className="text-gray-300 mb-4">
-                                Are you sure you want to delete <span className="font-semibold text-white">{productToDelete.name}</span>?
-                            </p>
-                            {productToDelete.image && (
-                                <div className="mb-4 flex items-center space-x-3 p-3 bg-[#2a2a2a] rounded-lg">
-                                    <img
-                                        src={productToDelete.image}
-                                        alt={productToDelete.name}
-                                        className="w-12 h-12 object-cover rounded-lg"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                        }}
-                                    />
-                                    <div>
-                                        <p className="text-sm text-gray-300">Product ID: {productToDelete.productId}</p>
-                                        <p className="text-sm text-gray-400">Category: {productToDelete.category}</p>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="p-6 border-t border-[#2a2a2a] flex justify-end space-x-3">
-                            <button
-                                onClick={cancelDelete}
-                                className="px-4 py-2 bg-[#2a2a2a] text-gray-300 hover:bg-[#3a3a3a] rounded-lg transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmDeleteProduct}
-                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-                            >
-                                Delete Product
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <DeleteModal
+                isDeleteModalOpen={isDeleteModalOpen}
+                productToDelete={productToDelete}
+                cancelDelete={cancelDelete}
+                confirmDeleteProduct={confirmDeleteProduct}
+            />
         </div>
     );
 }
