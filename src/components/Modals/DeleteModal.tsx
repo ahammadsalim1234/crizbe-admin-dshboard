@@ -4,7 +4,7 @@ import { Trash2, } from 'lucide-react';
 type Product = {
     id: string;
     name: string
-    image?: string;
+    images?: string[];
     productId: string;
     category: string
 };
@@ -46,20 +46,47 @@ function DeleteModal({
                             <p className="text-gray-300 mb-4">
                                 Are you sure you want to delete <span className="font-semibold text-white">{productToDelete.name}</span>?
                             </p>
-                            {productToDelete.image && (
-                                <div className="mb-4 flex items-center space-x-3 p-3 bg-[#2a2a2a] rounded-lg">
-                                    <img
-                                        src={productToDelete.image}
-                                        alt={productToDelete.name}
-                                        className="w-12 h-12 object-cover rounded-lg"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                        }}
-                                    />
-                                    <div>
-                                        <p className="text-sm text-gray-300">Product ID: {productToDelete.productId}</p>
-                                        <p className="text-sm text-gray-400">Category: {productToDelete.category}</p>
+                            {(productToDelete.images && productToDelete.images.length > 0) && (
+                                <div className="mb-4 p-3 bg-[#2a2a2a] rounded-lg">
+                                    <div className="flex items-center space-x-3 mb-2">
+                                        {productToDelete.images[0] && (
+                                            <img
+                                                src={productToDelete.images[0]}
+                                                alt={productToDelete.name}
+                                                className="w-12 h-12 object-cover rounded-lg"
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = 'none';
+                                                }}
+                                            />
+                                        )}
+                                        <div>
+                                            <p className="text-sm text-gray-300">Product ID: {productToDelete.productId}</p>
+                                            <p className="text-sm text-gray-400">Category: {productToDelete.category}</p>
+                                            {productToDelete.images.length > 1 && (
+                                                <p className="text-xs text-gray-500 mt-1">{productToDelete.images.length} images</p>
+                                            )}
+                                        </div>
                                     </div>
+                                    {productToDelete.images.length > 1 && (
+                                        <div className="flex space-x-1 mt-2">
+                                            {productToDelete.images.slice(1, 4).map((image, index) => (
+                                                <img
+                                                    key={index}
+                                                    src={image}
+                                                    alt={`${productToDelete.name} ${index + 2}`}
+                                                    className="w-8 h-8 object-cover rounded border border-[#3a3a3a]"
+                                                    onError={(e) => {
+                                                        e.currentTarget.style.display = 'none';
+                                                    }}
+                                                />
+                                            ))}
+                                            {productToDelete.images.length > 4 && (
+                                                <div className="w-8 h-8 bg-[#3a3a3a] rounded border border-[#3a3a3a] flex items-center justify-center">
+                                                    <span className="text-xs text-gray-400">+{productToDelete.images.length - 4}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

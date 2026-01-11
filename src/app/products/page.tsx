@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import ProductAddEditModal from '@/components/Modals/ProductAddEditModal';
 import DeleteModal from '@/components/Modals/DeleteModal';
+import { SizeVariant } from '@/components/Modals/ProductAddEditModal';
 
 type Product = {
     id: string;
@@ -23,7 +24,10 @@ type Product = {
     stock: number;
     sales: number;
     icon: string;
-    image?: string;
+    images?: string[];
+    description?: string;
+    ingredients?: string;
+    variants?: SizeVariant[];
 };
 
 const initialProducts: Product[] = [
@@ -142,12 +146,12 @@ export default function ProductsPage() {
         category: 'Electronics',
         price: '',
         stock: '',
-        sales: '',
         icon: '',
-        image: '',
+        images: [] as string[],
+        description: '',
+        ingredients: '',
+        variants: [] as SizeVariant[],
     });
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string>('');
 
     // Get all unique categories
     const allCategories = ['All', ...Array.from(new Set(products.map(p => p.category))).sort()];
@@ -214,28 +218,55 @@ export default function ProductsPage() {
             category: 'Electronics',
             price: '',
             stock: '',
-            sales: '',
             icon: '📦',
-            image: '',
+            images: [],
+            description: '',
+            ingredients: '',
+            variants: [],
         });
-        setImageFile(null);
-        setImagePreview('');
         setIsModalOpen(true);
     };
 
-    // Handle image file upload
-    const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const result = reader.result as string;
-                setImagePreview(result);
-                setFormData({ ...formData, image: result });
-            };
-            reader.readAsDataURL(file);
+    // Handle multiple image file uploads
+    const handleImageFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length > 0) {
+            const newImages: string[] = [];
+            let processedCount = 0;
+
+            files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const result = reader.result as string;
+                    newImages.push(result);
+                    processedCount++;
+
+                    if (processedCount === files.length) {
+                        setFormData((prevFormData) => ({
+                            ...prevFormData,
+                            images: [...prevFormData.images, ...newImages],
+                        }));
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
         }
+    };
+
+    // Handle adding image URL
+    const handleImageUrlAdd = (url: string) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            images: [...prevFormData.images, url],
+        }));
+    };
+
+    // Handle removing an image
+    const handleImageRemove = (index: number) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            images: prevFormData.images.filter((_, i) => i !== index),
+        }));
     };
 
     // Open modal for editing product
@@ -244,14 +275,14 @@ export default function ProductsPage() {
         setFormData({
             name: product.name,
             category: product.category,
-            price: product.price.replace('$', ''),
+            price: '', // Base price removed
             stock: product.stock.toString(),
-            sales: product.sales.toString(),
             icon: product.icon,
-            image: product.image || '',
+            images: product.images || [],
+            description: product.description || '',
+            ingredients: product.ingredients || '',
+            variants: product.variants || [],
         });
-        setImageFile(null);
-        setImagePreview(product.image || '');
         setIsModalOpen(true);
     };
 
@@ -259,16 +290,25 @@ export default function ProductsPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Calculate price from variants if available, otherwise use default
+        let productPrice = '$0.00';
+        if (formData.variants && formData.variants.length > 0 && formData.variants[0].price) {
+            productPrice = `$${parseFloat(formData.variants[0].price).toFixed(2)}`;
+        }
+
         const newProduct: Product = {
             id: editingProduct?.id || Date.now().toString(),
             name: formData.name,
             productId: editingProduct?.productId || generateProductId(),
             category: formData.category,
-            price: `$${parseFloat(formData.price).toFixed(2)}`,
+            price: productPrice,
             stock: parseInt(formData.stock),
-            sales: parseInt(formData.sales),
+            sales: editingProduct?.sales || 0,
             icon: formData.icon,
-            image: formData.image || undefined,
+            images: formData.images.length > 0 ? formData.images : undefined,
+            description: formData.description || undefined,
+            ingredients: formData.ingredients || undefined,
+            variants: formData.variants.length > 0 ? formData.variants : undefined,
         };
 
         if (editingProduct) {
@@ -286,9 +326,11 @@ export default function ProductsPage() {
             category: 'Electronics',
             price: '',
             stock: '',
-            sales: '',
             icon: '📦',
-            image: '',
+            images: [],
+            description: '',
+            ingredients: '',
+            variants: [],
         });
     };
 
@@ -322,12 +364,12 @@ export default function ProductsPage() {
             category: 'Electronics',
             price: '',
             stock: '',
-            sales: '',
             icon: '📦',
-            image: '',
+            images: [],
+            description: '',
+            ingredients: '',
+            variants: [],
         });
-        setImageFile(null);
-        setImagePreview('');
     };
 
     return (
@@ -403,9 +445,8 @@ export default function ProductsPage() {
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">PRODUCT ID</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">NAME</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">CATEGORY</th>
-                                    <th className="text-left p-4 text-gray-400 font-medium text-sm">PRICE</th>
+                                    <th className="text-left p-4 text-gray-400 font-medium text-sm">SIZE VARIANTS</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">STOCK</th>
-                                    <th className="text-left p-4 text-gray-400 font-medium text-sm">SALES</th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">ACTIONS</th>
                                 </tr>
                             </thead>
@@ -418,26 +459,47 @@ export default function ProductsPage() {
                                         <td className="p-4 text-gray-300 font-medium">{product.productId}</td>
                                         <td className="p-4">
                                             <div className="flex items-center space-x-3">
-                                                {product.image ? (
-                                                    <img
-                                                        src={product.image}
-                                                        alt={product.name}
-                                                        className="w-10 h-10 object-cover rounded-lg border border-[#3a3a3a]"
-                                                        onError={(e) => {
-                                                            e.currentTarget.style.display = 'none';
-                                                            const iconSpan = e.currentTarget.parentElement?.querySelector('.product-icon');
-                                                            if (iconSpan) iconSpan.classList.remove('hidden');
-                                                        }}
-                                                    />
+                                                {product.images && product.images.length > 0 ? (
+                                                    <div className="flex items-center space-x-1">
+                                                        <img
+                                                            src={product.images[0]}
+                                                            alt={product.name}
+                                                            className="w-10 h-10 object-cover rounded-lg border border-[#3a3a3a]"
+                                                            onError={(e) => {
+                                                                e.currentTarget.style.display = 'none';
+                                                                const iconSpan = e.currentTarget.parentElement?.parentElement?.querySelector('.product-icon');
+                                                                if (iconSpan) iconSpan.classList.remove('hidden');
+                                                            }}
+                                                        />
+                                                        {product.images.length > 1 && (
+                                                            <span className="text-xs text-gray-400 bg-[#2a2a2a] px-1.5 py-0.5 rounded">
+                                                                +{product.images.length - 1}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 ) : null}
-                                                <span className={`text-2xl product-icon ${product.image ? 'hidden' : ''}`}>{product.icon}</span>
+                                                <span className={`text-2xl product-icon ${product.images && product.images.length > 0 ? 'hidden' : ''}`}>{product.icon}</span>
                                                 <span className="text-gray-100">{product.name}</span>
                                             </div>
                                         </td>
                                         <td className="p-4 text-gray-300">{product.category}</td>
-                                        <td className="p-4 text-gray-100 font-semibold">{product.price}</td>
+                                        <td className="p-4">
+                                            {product.variants && product.variants.length > 0 ? (
+                                                <div className="space-y-1">
+                                                    {product.variants.map((variant, idx) => (
+                                                        <div key={idx} className="text-xs bg-[#2a2a2a] px-2 py-1 rounded border border-[#3a3a3a]">
+                                                            <span className="text-gray-300 font-medium">{variant.size}:</span>
+                                                            <span className="text-purple-400 font-semibold ml-1">
+                                                                ${parseFloat(variant.price || '0').toFixed(2)}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <span className="text-gray-500 text-sm">No variants</span>
+                                            )}
+                                        </td>
                                         <td className="p-4 text-gray-300">{product.stock}</td>
-                                        <td className="p-4 text-gray-300">{product.sales.toLocaleString()}</td>
                                         <td className="p-4">
                                             <div className="flex items-center space-x-2">
                                                 <button
@@ -467,16 +529,16 @@ export default function ProductsPage() {
             </div>
 
             {/* Add/Edit Product Modal */}
-            <ProductAddEditModal isModalOpen={isModalOpen}
+            <ProductAddEditModal
+                isModalOpen={isModalOpen}
                 editingProduct={editingProduct}
                 handleCloseModal={handleCloseModal}
                 handleSubmit={handleSubmit}
                 formData={formData}
                 setFormData={setFormData}
-                handleImageFileChange={handleImageFileChange}
-                setImagePreview={setImagePreview}
-                setImageFile={setImageFile}
-                imagePreview={imagePreview}
+                handleImageFilesChange={handleImageFilesChange}
+                handleImageUrlAdd={handleImageUrlAdd}
+                handleImageRemove={handleImageRemove}
             />
 
             {/* Delete Confirmation Modal */}
