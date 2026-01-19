@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Bell } from 'lucide-react'
 import admin from "../../public/assets/images/admin.png"
 import down from "../../public/assets/images/down.png"
 import flag from "../../public/assets/images/world.png"
 import { useSidebar } from '@/contexts/SidebarContext'
 import ProfileModal from './Modals/ProfileModal';
+import OutsideClick from './OutsideClick';
 
 
 function Header() {
@@ -17,6 +18,8 @@ function Header() {
     const handleOpen = () => {
         setOpen(true)
     }
+    const ref = useRef(null);
+    OutsideClick(ref, () => setOpen(false));
 
     return (
         <header className={`fixed top-0 right-0 border-b border-[#1f1f1f] z-30 transition-all duration-300 ${isCollapsed ? 'lg:left-20' : 'lg:left-64'} left-0 h-16`}>
@@ -48,20 +51,20 @@ function Header() {
                     <div className='relative'>
                         <Bell className='w-5 sm:h-6 text-gray-300 cursor-pointer hover:text-white' />
                     </div>
-                    <div className='flex items-center mr-[8px] sm:mr-[8px]' onClick={handleOpen}>
+                    <div className='flex items-center ' onClick={handleOpen}>
                         <Image
                             src={admin}
                             alt="admin"
                             width={35}
                             height={35}
-                            className='rounded-full border border-gray-600'
+                            className='rounded-full border border-gray-600 mr-[8px] sm:mr-[8px]'
                         />
+                        <span className='hidden sm:block text-gray-100 font-medium'>John Mark</span>
                     </div>
-                    <span className='hidden sm:block text-gray-100 font-medium'>John Mark</span>
                 </div>
             </div>
             <div className='relative'>
-                <ProfileModal isOpen={isOpen} />
+                <ProfileModal isOpen={isOpen} ref={ref} />
             </div>
         </header>
     )
