@@ -16,11 +16,13 @@ import {
     HelpCircle,
     Menu,
     X,
-    ChevronLeft
+    ChevronLeft,
+    Layers
 } from 'lucide-react';
 
 const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+    { icon: Layers, label: 'Categories', path: '/categories' },
     { icon: Package, label: 'Products', path: '/products' },
     { icon: Users, label: 'Clients', path: '/clients' },
     { icon: DollarSign, label: 'Sales', path: '/sales' },
