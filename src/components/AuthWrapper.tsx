@@ -18,7 +18,7 @@ export default function AuthWrapper({ children }: { children: React.ReactNode })
 
     return (
         <SidebarProvider>
-            <div className="flex min-h-screen">
+            <div className="flex min-h-screen bg-[#0f0f0f] text-gray-100">
                 <Sidebar />
                 <MainContent>
                     {children}
