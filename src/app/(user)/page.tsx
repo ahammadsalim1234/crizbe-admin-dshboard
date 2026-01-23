@@ -1,10 +1,12 @@
 import { ImageParticles } from '@/components/user/ImageParticles';
-import HomePage from '../_components/HomePage';
+import Hero from '../_components/Hero';
+import Flavours from '../_components/Flavours';
+import NextFlavour from '../_components/NextFlavour';
 
 export default function Home() {
     return (
-        <>
-            <HomePage />
+        <div className="bg-linear-to-b from-[#FFFAEF] to-[#E3D1A5]">
+            <Hero />
             <ImageParticles
                 className="absolute inset-0"
                 images={[
@@ -31,6 +33,8 @@ export default function Home() {
                 size={30}
                 staticity={12}
             />
-        </>
+            <Flavours />
+            <NextFlavour />
+        </div>
     );
 }
