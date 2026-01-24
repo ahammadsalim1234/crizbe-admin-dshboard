@@ -254,6 +254,12 @@ export default function SmoothScroll() {
                             end: 'top top',
                             scrub: true,
                             invalidateOnRefresh: true,
+                            onEnter: () => {
+                                gsap.set('#pista-bottle-target', { zIndex: 100 });
+                            },
+                            onLeaveBack: () => {
+                                gsap.set('#pista-bottle-target', { zIndex: 1 });
+                            },
                         },
                     });
 

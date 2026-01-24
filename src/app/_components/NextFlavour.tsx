@@ -20,7 +20,7 @@ export default function NextFlavour() {
                         alt=""
                         width={100}
                         height={100}
-                        className="w-full h-full"
+                        className="w-full h-full invisible opacity-0"
                     />
                 </div>
                 <div>
