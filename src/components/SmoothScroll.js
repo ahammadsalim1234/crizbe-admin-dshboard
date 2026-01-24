@@ -306,43 +306,64 @@ export default function SmoothScroll() {
                         '#next-flavour-bottle-target'
                     );
                     if (flavourBottle && flavourBottleTarget) {
-                        tl2.to('#pista-bottle-target', {
-                            x: () => {
-                                const target = document.querySelector(
-                                    '#next-flavour-bottle-target'
-                                );
-                                const bottle = document.querySelector('#pista-bottle-target');
-                                if (!target || !bottle) return 0;
-                                const tRect = target.getBoundingClientRect();
-                                const bRect = bottle.getBoundingClientRect();
-                                const curX = gsap.getProperty(bottle, 'x');
-                                return (
-                                    tRect.left +
-                                    tRect.width / 2 -
-                                    (bRect.left + bRect.width / 2) +
-                                    curX
-                                );
-                            },
-                            y: () => {
-                                const target = document.querySelector(
-                                    '#next-flavour-bottle-target'
-                                );
-                                const bottle = document.querySelector('#pista-bottle-target');
-                                if (!target || !bottle) return 0;
-                                const tRect = target.getBoundingClientRect();
-                                const bRect = bottle.getBoundingClientRect();
-                                const curY = gsap.getProperty(bottle, 'y');
-                                return (
-                                    tRect.top +
-                                    tRect.height / 2 -
-                                    (bRect.top + bRect.height / 2) +
-                                    curY
-                                );
-                            },
-                            rotate: '0deg',
-                            width: '230px',
-                            ease: 'none',
-                        });
+                        if (flavourBottle && flavourBottleTarget) {
+                            tl2.to('#pista-bottle-target', {
+                                x: () => {
+                                    const target = document.querySelector(
+                                        '#next-flavour-bottle-target'
+                                    );
+                                    const bottle = document.querySelector('#pista-bottle-target');
+                                    if (!target || !bottle) return 0;
+                                    const tRect = target.getBoundingClientRect();
+                                    const bRect = bottle.getBoundingClientRect();
+                                    const curX = gsap.getProperty(bottle, 'x');
+                                    return (
+                                        tRect.left +
+                                        tRect.width / 2 -
+                                        (bRect.left + bRect.width / 2) +
+                                        curX
+                                    );
+                                },
+                                y: () => {
+                                    const target = document.querySelector(
+                                        '#next-flavour-bottle-target'
+                                    );
+                                    const bottle = document.querySelector('#pista-bottle-target');
+                                    if (!target || !bottle) return 0;
+                                    const tRect = target.getBoundingClientRect();
+                                    const bRect = bottle.getBoundingClientRect();
+                                    const curY = gsap.getProperty(bottle, 'y');
+                                    return (
+                                        tRect.top +
+                                        tRect.height / 2 -
+                                        (bRect.top + bRect.height / 2) +
+                                        curY
+                                    );
+                                },
+                                width: '230px',
+                                ease: 'none',
+                            });
+
+                            // Add rotation sequence: 0 -> 19 -> 0
+                            tl2.to(
+                                '#pista-bottle-target',
+                                {
+                                    rotate: '19deg',
+                                    ease: 'power1.inOut',
+                                    duration: 0.5,
+                                },
+                                0
+                            );
+                            tl2.to(
+                                '#pista-bottle-target',
+                                {
+                                    rotate: '0deg',
+                                    ease: 'power1.inOut',
+                                    duration: 0.5,
+                                },
+                                0.5
+                            );
+                        }
                     }
                 },
             });
