@@ -43,39 +43,39 @@ export default function SmoothScroll() {
 
             ScrollTrigger.matchMedia({
                 '(min-width: 1024px)': function () {
-                    // const horizontalScrollWrapper = document.querySelector(
-                    //     '.horizontal-scroll-wrapper'
-                    // );
                     const almondBottle = document.querySelector('#almond-bottle');
                     const almondBottleTarget = document.querySelector(
                         '.almond-bottle-target-position'
                     );
-                    // if (horizontalScrollWrapper) {
-                    //     const scrollWidth = horizontalScrollWrapper.scrollWidth - window.innerWidth;
-                    //     gsap.to(horizontalScrollWrapper, {
-                    //         x: -scrollWidth,
-                    //         ease: 'none',
-                    //         scrollTrigger: {
-                    //             trigger: '.second-section',
-                    //             start: 'top top',
-                    //             end: () => `+=${scrollWidth}`,
-                    //             scrub: 1,
-                    //             pin: true,
-                    //             anticipatePin: 1,
-                    //             invalidateOnRefresh: true,
-                    //         },
-                    //     });
-                    // }
+
+                    const horizontalWrapper = document.querySelector('.horizontal-scroll-wrapper');
+                    if (horizontalWrapper) {
+                        const scrollWidth = horizontalWrapper.scrollWidth - window.innerWidth;
+                        gsap.to(horizontalWrapper, {
+                            x: -scrollWidth,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: '.flavours-section',
+                                start: 'top top',
+                                end: () => `+=${scrollWidth}`,
+                                scrub: 1,
+                                pin: true,
+                                anticipatePin: 1,
+                                invalidateOnRefresh: true,
+                            },
+                        });
+                    }
+
                     const tl1 = gsap.timeline({
                         scrollTrigger: {
                             trigger: '.flavours-section',
-                            start: '20% 100%',
-                            end: '50% 50%',
+                            start: 'top 80%',
+                            end: 'top top',
                             scrub: true,
                             invalidateOnRefresh: true,
-                            // markers: true,
                         },
                     });
+
                     if (almondBottleTarget && almondBottle) {
                         tl1.to(
                             '#almond-bottle',
@@ -89,6 +89,7 @@ export default function SmoothScroll() {
                                     const tRect = target.getBoundingClientRect();
                                     const bRect = bottle.getBoundingClientRect();
                                     const curX = gsap.getProperty(bottle, 'x');
+                                    // Initial landing position
                                     return (
                                         tRect.left +
                                         tRect.width / 2 -
@@ -119,6 +120,24 @@ export default function SmoothScroll() {
                             'cookie'
                         );
                     }
+
+                    // New timeline for bottle moving WITH the horizontal scroll
+                    const tlMoveWithScroll = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: '.flavours-section',
+                            start: 'top top',
+                            end: () =>
+                                `+=${document.querySelector('.horizontal-scroll-wrapper').scrollWidth - window.innerWidth}`,
+                            scrub: true,
+                            invalidateOnRefresh: true,
+                        },
+                    });
+
+                    tlMoveWithScroll.to('#almond-bottle', {
+                        x: () =>
+                            `+=${-(document.querySelector('.horizontal-scroll-wrapper').scrollWidth - window.innerWidth)}`,
+                        ease: 'none',
+                    });
                 },
             });
             ScrollTrigger.refresh();
