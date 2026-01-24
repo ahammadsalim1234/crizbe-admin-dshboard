@@ -59,9 +59,7 @@ export default function SmoothScroll() {
                     const horizontalWrapper = document.querySelector('.horizontal-scroll-wrapper');
                     if (horizontalWrapper) {
                         const scrollWidth = horizontalWrapper.scrollWidth - window.innerWidth;
-                        gsap.to(horizontalWrapper, {
-                            x: -scrollWidth,
-                            ease: 'none',
+                        const horizontalTl = gsap.timeline({
                             scrollTrigger: {
                                 trigger: '.flavours-section',
                                 start: 'top top',
@@ -72,6 +70,32 @@ export default function SmoothScroll() {
                                 invalidateOnRefresh: true,
                             },
                         });
+
+                        horizontalTl.to(horizontalWrapper, {
+                            x: -scrollWidth,
+                            ease: 'none',
+                            duration: 1,
+                        });
+
+                        horizontalTl.set(
+                            '.view-all-btn',
+                            {
+                                visibility: 'visible',
+                                pointerEvents: 'auto',
+                            },
+                            0.75
+                        );
+
+                        horizontalTl.fromTo(
+                            '.view-all-btn',
+                            { y: 600 },
+                            {
+                                y: 0,
+                                ease: 'power2.out',
+                                duration: 0.25,
+                            },
+                            0.75
+                        ); // Smooth slide starting at 75% without overshoot
                     }
 
                     const tl1 = gsap.timeline({

@@ -84,6 +84,18 @@ export default function Flavours() {
                     </div>
                 </div>
             </div>
+            <div className="absolute bottom-[60px] left-1/2 -translate-x-1/2 z-10">
+                <Button className="view-all-btn bg-[#4E3325] hover:bg-[#3d281d] text-white rounded-full text-[16px] font-medium flex items-center gap-[10px] translate-y-[600px] invisible">
+                    View all products{' '}
+                    <Image
+                        src="/images/user/arrow-right.svg"
+                        alt=""
+                        width={100}
+                        height={100}
+                        className="w-[16px]"
+                    />
+                </Button>
+            </div>
         </section>
     );
 }
