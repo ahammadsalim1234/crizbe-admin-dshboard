@@ -14,7 +14,7 @@ export default function NextFlavour() {
                     <br />
                     flavor
                 </h2>
-                <div className="w-[230px]">
+                <div className="w-[230px] next-flavour-bottle-target">
                     <Image
                         src="/images/user/pista-bottle.png"
                         alt=""
