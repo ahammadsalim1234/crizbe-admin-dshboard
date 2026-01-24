@@ -44,8 +44,16 @@ export default function SmoothScroll() {
             ScrollTrigger.matchMedia({
                 '(min-width: 1024px)': function () {
                     const almondBottle = document.querySelector('#almond-bottle');
+                    const hazelnutBottle = document.querySelector('#hazelnut-bottle');
+                    const pistaBottle = document.querySelector('#pista-bottle');
                     const almondBottleTarget = document.querySelector(
                         '.almond-bottle-target-position'
+                    );
+                    const hazelnutBottleTarget = document.querySelector(
+                        '.hazelnut-bottle-target-position'
+                    );
+                    const pistaBottleTarget = document.querySelector(
+                        '.pista-bottle-target-position'
                     );
 
                     const horizontalWrapper = document.querySelector('.horizontal-scroll-wrapper');
@@ -102,6 +110,96 @@ export default function SmoothScroll() {
                                         '.almond-bottle-target-position'
                                     );
                                     const bottle = document.querySelector('#almond-bottle');
+                                    if (!target || !bottle) return 0;
+                                    const tRect = target.getBoundingClientRect();
+                                    const bRect = bottle.getBoundingClientRect();
+                                    const curY = gsap.getProperty(bottle, 'y');
+                                    return (
+                                        tRect.top +
+                                        tRect.height / 2 -
+                                        (bRect.top + bRect.height / 2) +
+                                        curY
+                                    );
+                                },
+                                rotate: '0deg',
+                                width: '230px',
+                                ease: 'none',
+                            },
+                            'cookie'
+                        );
+                    }
+
+                    if (hazelnutBottleTarget && hazelnutBottle) {
+                        tl1.to(
+                            '#hazelnut-bottle',
+                            {
+                                x: () => {
+                                    const target = document.querySelector(
+                                        '.hazelnut-bottle-target-position'
+                                    );
+                                    const bottle = document.querySelector('#hazelnut-bottle');
+                                    if (!target || !bottle) return 0;
+                                    const tRect = target.getBoundingClientRect();
+                                    const bRect = bottle.getBoundingClientRect();
+                                    const curX = gsap.getProperty(bottle, 'x');
+                                    // Initial landing position
+                                    return (
+                                        tRect.left +
+                                        tRect.width / 2 -
+                                        (bRect.left + bRect.width / 2) +
+                                        curX
+                                    );
+                                },
+                                y: () => {
+                                    const target = document.querySelector(
+                                        '.hazelnut-bottle-target-position'
+                                    );
+                                    const bottle = document.querySelector('#hazelnut-bottle');
+                                    if (!target || !bottle) return 0;
+                                    const tRect = target.getBoundingClientRect();
+                                    const bRect = bottle.getBoundingClientRect();
+                                    const curY = gsap.getProperty(bottle, 'y');
+                                    return (
+                                        tRect.top +
+                                        tRect.height / 2 -
+                                        (bRect.top + bRect.height / 2) +
+                                        curY
+                                    );
+                                },
+                                rotate: '0deg',
+                                width: '230px',
+                                ease: 'none',
+                            },
+                            'cookie'
+                        );
+                    }
+
+                    if (pistaBottleTarget && pistaBottle) {
+                        tl1.to(
+                            '#pista-bottle',
+                            {
+                                x: () => {
+                                    const target = document.querySelector(
+                                        '.pista-bottle-target-position'
+                                    );
+                                    const bottle = document.querySelector('#pista-bottle');
+                                    if (!target || !bottle) return 0;
+                                    const tRect = target.getBoundingClientRect();
+                                    const bRect = bottle.getBoundingClientRect();
+                                    const curX = gsap.getProperty(bottle, 'x');
+                                    // Initial landing position
+                                    return (
+                                        tRect.left +
+                                        tRect.width / 2 -
+                                        (bRect.left + bRect.width / 2) +
+                                        curX
+                                    );
+                                },
+                                y: () => {
+                                    const target = document.querySelector(
+                                        '.pista-bottle-target-position'
+                                    );
+                                    const bottle = document.querySelector('#pista-bottle');
                                     if (!target || !bottle) return 0;
                                     const tRect = target.getBoundingClientRect();
                                     const bRect = bottle.getBoundingClientRect();

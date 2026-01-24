@@ -36,11 +36,12 @@ export default function Hero() {
                 id="almond-bottle"
                 className="absolute z-1 w-[230px] bottom-0 -rotate-[28.55deg] left-[45%] top-[60%]"
             />
-            {/* <Image
+            <Image
                 src="/images/user/hazelnut-bottle.png"
                 alt="Crizbe"
                 width={100}
                 height={100}
+                id="hazelnut-bottle"
                 className="absolute z-1 w-[230px] bottom-0 -rotate-[17.64deg] left-[65%] top-[50%]"
             />
             <Image
@@ -48,8 +49,9 @@ export default function Hero() {
                 alt="Crizbe"
                 width={100}
                 height={100}
+                id="pista-bottle"
                 className="absolute z-1 w-[230px] bottom-0 -rotate-[7.5deg] left-[83%] top-[25%]"
-            /> */}
+            />
             {/* <Image
                 src="/images/user/crizbe-bg.png"
                 alt="Crizbe"

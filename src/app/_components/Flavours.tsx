@@ -42,7 +42,7 @@ export default function Flavours() {
 
                     {/* Hazelnut Card */}
                     <div className="bg-[url(/images/user/hazelnut-card.png)] relative bg-contain bg-no-repeat w-[600px] h-[360px] p-[42px] flex flex-col justify-end shrink-0">
-                        <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%]">
+                        <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%] hazelnut-bottle-target-position">
                             <Image
                                 src="/images/user/hazelnut-bottle.png"
                                 alt=""
@@ -62,7 +62,7 @@ export default function Flavours() {
 
                     {/* Pista Card */}
                     <div className="bg-[url(/images/user/pista-card.png)] relative bg-contain bg-no-repeat w-[600px] h-[360px] p-[42px] flex flex-col justify-end shrink-0">
-                        <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%]">
+                        <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%] pista-bottle-target-position">
                             <Image
                                 src="/images/user/pista-bottle.png"
                                 alt=""
