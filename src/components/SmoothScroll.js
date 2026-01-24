@@ -81,6 +81,37 @@ export default function SmoothScroll() {
                             end: 'top top',
                             scrub: true,
                             invalidateOnRefresh: true,
+                            onToggle: (self) => {
+                                // When we reach the bottom of the landing (active means in the transition)
+                                // But specifically when we scroll past 'end' (top top)
+                                const isPastEnd = self.progress === 1;
+                                const heroBottles = [
+                                    '#almond-bottle',
+                                    '#hazelnut-bottle',
+                                    '#pista-bottle',
+                                ];
+                                const targetBottles = [
+                                    '#almond-bottle-target',
+                                    '#hazelnut-bottle-target',
+                                    '#pista-bottle-target',
+                                ];
+
+                                if (isPastEnd) {
+                                    // Hide hero bottles, show card bottles
+                                    gsap.set(heroBottles, { display: 'none' });
+                                    gsap.set(targetBottles, {
+                                        visibility: 'visible',
+                                        opacity: 1,
+                                    });
+                                } else {
+                                    // Show hero bottles, hide card bottles
+                                    gsap.set(heroBottles, { display: 'block' });
+                                    gsap.set(targetBottles, {
+                                        visibility: 'hidden',
+                                        opacity: 0,
+                                    });
+                                }
+                            },
                         },
                     });
 
@@ -97,7 +128,6 @@ export default function SmoothScroll() {
                                     const tRect = target.getBoundingClientRect();
                                     const bRect = bottle.getBoundingClientRect();
                                     const curX = gsap.getProperty(bottle, 'x');
-                                    // Initial landing position
                                     return (
                                         tRect.left +
                                         tRect.width / 2 -
@@ -142,7 +172,6 @@ export default function SmoothScroll() {
                                     const tRect = target.getBoundingClientRect();
                                     const bRect = bottle.getBoundingClientRect();
                                     const curX = gsap.getProperty(bottle, 'x');
-                                    // Initial landing position
                                     return (
                                         tRect.left +
                                         tRect.width / 2 -
@@ -187,7 +216,6 @@ export default function SmoothScroll() {
                                     const tRect = target.getBoundingClientRect();
                                     const bRect = bottle.getBoundingClientRect();
                                     const curX = gsap.getProperty(bottle, 'x');
-                                    // Initial landing position
                                     return (
                                         tRect.left +
                                         tRect.width / 2 -
@@ -218,24 +246,6 @@ export default function SmoothScroll() {
                             'cookie'
                         );
                     }
-
-                    // New timeline for bottle moving WITH the horizontal scroll
-                    const tlMoveWithScroll = gsap.timeline({
-                        scrollTrigger: {
-                            trigger: '.flavours-section',
-                            start: 'top top',
-                            end: () =>
-                                `+=${document.querySelector('.horizontal-scroll-wrapper').scrollWidth - window.innerWidth}`,
-                            scrub: true,
-                            invalidateOnRefresh: true,
-                        },
-                    });
-
-                    tlMoveWithScroll.to('#almond-bottle', {
-                        x: () =>
-                            `+=${-(document.querySelector('.horizontal-scroll-wrapper').scrollWidth - window.innerWidth)}`,
-                        ease: 'none',
-                    });
                 },
             });
             ScrollTrigger.refresh();

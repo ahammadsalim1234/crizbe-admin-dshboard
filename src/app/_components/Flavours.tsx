@@ -24,11 +24,12 @@ export default function Flavours() {
                     <div className="bg-[url(/images/user/almond-card.png)] relative bg-contain bg-no-repeat w-[600px] h-[360px] p-[42px] flex flex-col justify-end shrink-0">
                         <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%] almond-bottle-target-position">
                             <Image
+                                id="almond-bottle-target"
                                 src="/images/user/almond-bottle.png"
                                 alt=""
                                 width={100}
                                 height={100}
-                                className="w-full h-full invisible"
+                                className="w-full h-full invisible opacity-0"
                             />
                         </div>
                         <h2 className="text-[#5C4114] text-[40px] font-bricolage font-semibold mb-[10px]">
@@ -44,11 +45,12 @@ export default function Flavours() {
                     <div className="bg-[url(/images/user/hazelnut-card.png)] relative bg-contain bg-no-repeat w-[600px] h-[360px] p-[42px] flex flex-col justify-end shrink-0">
                         <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%] hazelnut-bottle-target-position">
                             <Image
+                                id="hazelnut-bottle-target"
                                 src="/images/user/hazelnut-bottle.png"
                                 alt=""
                                 width={100}
                                 height={100}
-                                className="w-full h-full"
+                                className="w-full h-full invisible opacity-0"
                             />
                         </div>
                         <h2 className="text-[#FFFFFF] text-[40px] font-bricolage font-semibold mb-[10px]">
@@ -64,11 +66,12 @@ export default function Flavours() {
                     <div className="bg-[url(/images/user/pista-card.png)] relative bg-contain bg-no-repeat w-[600px] h-[360px] p-[42px] flex flex-col justify-end shrink-0">
                         <div className="w-[230px] absolute right-[70px] top-[50%] translate-y-[-50%] pista-bottle-target-position">
                             <Image
+                                id="pista-bottle-target"
                                 src="/images/user/pista-bottle.png"
                                 alt=""
                                 width={100}
                                 height={100}
-                                className="w-full h-full"
+                                className="w-full h-full invisible opacity-0"
                             />
                         </div>
                         <h2 className="text-[#FFFFFF] text-[40px] font-bricolage font-semibold mb-[10px]">
