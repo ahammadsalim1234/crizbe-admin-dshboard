@@ -1,5 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { useCreateCategory } from '@/queries/use-categories';
 
 export interface CategoryFormData {
     name: string;
@@ -19,7 +20,6 @@ interface Props {
     isModalOpen: boolean;
     editingCategory: Category | null;
     handleCloseModal: () => void;
-    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     formData: CategoryFormData;
     setFormData: React.Dispatch<React.SetStateAction<CategoryFormData>>;
 }
@@ -28,10 +28,20 @@ function CategoryAddEditModal({
     isModalOpen,
     editingCategory,
     handleCloseModal,
-    handleSubmit,
     formData,
-    setFormData
+    setFormData,
 }: Props) {
+    const { mutate } = useCreateCategory();
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        mutate(formData, {
+            onSuccess: () => {
+                handleCloseModal();
+            },
+        });
+    };
+
     if (!isModalOpen) return null;
 
     return (
@@ -70,7 +80,9 @@ function CategoryAddEditModal({
                         </label>
                         <textarea
                             value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            onChange={(e) =>
+                                setFormData({ ...formData, description: e.target.value })
+                            }
                             className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
                             placeholder="Enter category description"
                             rows={4}
@@ -82,7 +94,9 @@ function CategoryAddEditModal({
                             type="checkbox"
                             id="is_active"
                             checked={formData.is_active}
-                            onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                            onChange={(e) =>
+                                setFormData({ ...formData, is_active: e.target.checked })
+                            }
                             className="w-4 h-4 rounded border-gray-600 bg-[#2a2a2a] text-purple-600 focus:ring-purple-500"
                         />
                         <label htmlFor="is_active" className="text-sm font-medium text-gray-300">
