@@ -44,13 +44,18 @@ interface ProductFormData {
     ingredients: string;
 }
 
-type Product = {
+export type Product = {
     id: string;
     name: string;
     productId: string;
-    category: string;
+    category: {
+        id: string;
+        name: string;
+    };
     price: string;
     stock: number;
+    sales: number;
+    icon: string;
     images?: string[];
     description?: string;
     ingredients?: string;
@@ -67,6 +72,7 @@ interface Props {
     handleImageFilesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleImageUrlAdd: (url: string) => void;
     handleImageRemove: (index: number) => void;
+    categories?: any[];
 }
 
 function ProductAddEditModal({
@@ -79,6 +85,7 @@ function ProductAddEditModal({
     handleImageFilesChange,
     handleImageUrlAdd,
     handleImageRemove,
+    categories = [],
 }: Props) {
     return (
         <>
@@ -174,11 +181,12 @@ function ProductAddEditModal({
                                         }
                                         className="w-full  bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
                                     >
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Home">Home</option>
-                                        <option value="Sports">Sports</option>
-                                        <option value="Fashion">Fashion</option>
-                                        <option value="Books">Books</option>
+                                        <option value="">Select Category</option>
+                                        {categories.map((cat) => (
+                                            <option key={cat.id} value={cat.id}>
+                                                {cat.name}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
