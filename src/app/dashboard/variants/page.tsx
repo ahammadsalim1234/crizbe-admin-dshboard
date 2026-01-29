@@ -209,7 +209,7 @@ export default function VariantsPage() {
                                         <td className="p-4 text-gray-100 font-medium">
                                             <div className="flex items-center space-x-2">
                                                 <Package className="w-4 h-4 text-gray-500" />
-                                                <span>{variant.product_name}</span>
+                                                <span>{variant.product_detail?.name}</span>
                                             </div>
                                         </td>
                                         <td className="p-4 text-gray-300">
@@ -220,7 +220,7 @@ export default function VariantsPage() {
                                         <td className="p-4 text-purple-400 font-medium">
                                             ${parseFloat(variant.price || '0').toFixed(2)}
                                         </td>
-                                        <td className="p-4 text-gray-300">{variant.quantity}</td>
+                                        <td className="p-4 text-gray-300">{variant.stock}</td>
                                         <td className="p-4">
                                             <div className="flex items-center space-x-2">
                                                 <button

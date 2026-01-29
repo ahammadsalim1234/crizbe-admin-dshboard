@@ -29,6 +29,23 @@ import { useFetchProducts } from '@/queries/use-products';
 import { API_ENDPOINTS } from '@/utils/api-endpoints';
 import Loader from '@/components/ui/loader';
 
+const formatDateTime = (dateString: string) => {
+    if (!dateString) return 'N/A';
+    try {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        }).format(date);
+    } catch (e) {
+        return dateString;
+    }
+};
+
 export default function ProductStockPage() {
     const params = useParams();
     const router = useRouter();
@@ -267,9 +284,6 @@ export default function ProductStockPage() {
                                     <thead>
                                         <tr className="border-b border-[#2a2a2a]">
                                             <th className="text-left p-4 text-gray-400 font-medium text-sm">
-                                                VARIANT
-                                            </th>
-                                            <th className="text-left p-4 text-gray-400 font-medium text-sm">
                                                 QUANTITY (kg)
                                             </th>
                                             <th className="text-left p-4 text-gray-400 font-medium text-sm">
@@ -281,9 +295,6 @@ export default function ProductStockPage() {
                                             <th className="text-left p-4 text-gray-400 font-medium text-sm">
                                                 NOTES
                                             </th>
-                                            <th className="text-left p-4 text-gray-400 font-medium text-sm">
-                                                ACTIONS
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -292,9 +303,6 @@ export default function ProductStockPage() {
                                                 key={item.id}
                                                 className="border-b border-[#2a2a2a] hover:bg-[#2a2a2a] transition-colors text-sm"
                                             >
-                                                <td className="p-4 text-gray-100">
-                                                    {item.variant_name}
-                                                </td>
                                                 <td className="p-4 text-gray-300">
                                                     {(item.type === 'Addition' ? '+' : '-') +
                                                         item.quantity}
@@ -310,18 +318,11 @@ export default function ProductStockPage() {
                                                         {item.type}
                                                     </span>
                                                 </td>
-                                                <td className="p-4 text-gray-400">{item.date}</td>
+                                                <td className="p-4 text-gray-400">
+                                                    {formatDateTime(item.created_at)}
+                                                </td>
                                                 <td className="p-4 text-gray-400 max-w-xs truncate">
                                                     {item.notes}
-                                                </td>
-                                                <td className="p-4">
-                                                    <button
-                                                        onClick={() => handleDeleteHistory(item.id)}
-                                                        className="p-2 bg-red-500 bg-opacity-10 hover:bg-opacity-20 rounded-lg transition-colors text-red-500"
-                                                        title="Delete History Record"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
                                                 </td>
                                             </tr>
                                         ))}

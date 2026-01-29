@@ -24,7 +24,6 @@ export default function VariantStockAddModal({
     const [formData, setFormData] = useState({
         variantId: '',
         quantity: '',
-        purchasePrice: '',
         notes: '',
     });
 
@@ -35,10 +34,9 @@ export default function VariantStockAddModal({
         handleSubmit({
             ...formData,
             quantity: parseFloat(formData.quantity) || 0,
-            purchase_price: parseFloat(formData.purchasePrice) || 0,
             date: new Date().toISOString(),
         });
-        setFormData({ variantId: '', quantity: '', purchasePrice: '', notes: '' });
+        setFormData({ variantId: '', quantity: '', notes: '' });
     };
 
     return (
@@ -79,10 +77,10 @@ export default function VariantStockAddModal({
                         </select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Quantity (kg)
+                                Quantity
                             </label>
                             <input
                                 type="number"
@@ -93,24 +91,7 @@ export default function VariantStockAddModal({
                                 onChange={(e) =>
                                     setFormData({ ...formData, quantity: e.target.value })
                                 }
-                                placeholder="e.g. 1.5"
-                                className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Purchase Price
-                            </label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                required
-                                value={formData.purchasePrice}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, purchasePrice: e.target.value })
-                                }
-                                placeholder="0.00"
+                                placeholder="e.g. 10"
                                 className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
                             />
                         </div>

@@ -175,9 +175,6 @@ export default function StockPage() {
                             <thead>
                                 <tr className="border-b border-[#2a2a2a]">
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">
-                                        PRODUCT ID
-                                    </th>
-                                    <th className="text-left p-4 text-gray-400 font-medium text-sm">
                                         NAME
                                     </th>
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">
@@ -200,14 +197,8 @@ export default function StockPage() {
                                         key={product.id}
                                         className="border-b border-[#2a2a2a] hover:bg-[#2a2a2a] transition-colors"
                                     >
-                                        <td className="p-4 text-gray-300 font-medium">
-                                            {product.productId}
-                                        </td>
                                         <td className="p-4">
                                             <div className="flex items-center space-x-3">
-                                                <div className="w-8 h-8 bg-[#2a2a2a] rounded overflow-hidden flex items-center justify-center">
-                                                    <Package className="w-4 h-4 text-gray-500" />
-                                                </div>
                                                 <span className="text-gray-100">
                                                     {product.name}
                                                 </span>
