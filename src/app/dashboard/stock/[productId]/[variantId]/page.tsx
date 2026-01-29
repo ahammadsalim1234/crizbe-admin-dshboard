@@ -175,7 +175,7 @@ export default function VariantStockDetailPage() {
                             <thead>
                                 <tr className="border-b border-[#2a2a2a]">
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">
-                                        QUANTITY (kg)
+                                        QUANTITY
                                     </th>
 
                                     <th className="text-left p-4 text-gray-400 font-medium text-sm">
