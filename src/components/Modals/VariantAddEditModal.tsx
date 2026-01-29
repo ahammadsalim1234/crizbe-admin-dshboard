@@ -8,6 +8,7 @@ export interface VariantFormData {
     size: string;
     price: string;
     quantity: string;
+    weight_per_unit: string;
 }
 
 interface Product {
@@ -58,7 +59,22 @@ function VariantAddEditModal({
             setFormData({ ...formData, size: '' });
         } else {
             setUseCustomSize(false);
-            setFormData({ ...formData, size: val });
+
+            // Auto-calculate weight_per_unit based on size
+            let weight = '';
+            if (val.endsWith('gm')) {
+                const num = parseFloat(val.replace('gm', ''));
+                if (!isNaN(num)) weight = (num / 1000).toString();
+            } else if (val.endsWith('kg')) {
+                const num = parseFloat(val.replace('kg', ''));
+                if (!isNaN(num)) weight = num.toString();
+            }
+
+            setFormData({
+                ...formData,
+                size: val,
+                weight_per_unit: weight || formData.weight_per_unit,
+            });
         }
     };
 
@@ -178,6 +194,26 @@ function VariantAddEditModal({
                                 placeholder="0"
                             />
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Weight Per Unit (kg)
+                        </label>
+                        <input
+                            type="number"
+                            step="0.001"
+                            required
+                            value={formData.weight_per_unit}
+                            onChange={(e) =>
+                                setFormData({ ...formData, weight_per_unit: e.target.value })
+                            }
+                            className="w-full bg-[#2a2a2a] text-gray-100 px-4 py-2 rounded-lg border border-[#3a3a3a] focus:outline-none focus:border-purple-500"
+                            placeholder="e.g. 0.1 for 100gm"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Enter the weight in kg. Example: 100gm = 0.1, 500gm = 0.5, 1kg = 1.0
+                        </p>
                     </div>
 
                     <div className="flex justify-end space-x-3 pt-4">

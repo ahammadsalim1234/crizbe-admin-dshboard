@@ -37,6 +37,7 @@ export default function VariantsPage() {
         size: '',
         price: '',
         quantity: '',
+        weight_per_unit: '',
     });
 
     const variants = variantsData?.data || [];
@@ -77,6 +78,7 @@ export default function VariantsPage() {
             size: '',
             price: '',
             quantity: '',
+            weight_per_unit: '',
         });
         setIsModalOpen(true);
     };
@@ -89,6 +91,7 @@ export default function VariantsPage() {
             size: variant.size,
             price: variant.price.toString(),
             quantity: variant.quantity.toString(),
+            weight_per_unit: (variant.weight_per_unit || '').toString(),
         });
         setIsModalOpen(true);
     };
@@ -101,6 +104,7 @@ export default function VariantsPage() {
             size: formData.size,
             price: parseFloat(formData.price) || 0,
             quantity: parseInt(formData.quantity) || 0,
+            weight_per_unit: parseFloat(formData.weight_per_unit) || 0,
         };
 
         try {
